@@ -1,0 +1,5 @@
+#first you would want the user to deposit the amount 
+#then he will tell you the number of lines he will be betting on 
+#then ask as to how much will he like to bet 
+# we create a list, in this we add the number of possible symbols depending on their count
+# fromt he dictionary
