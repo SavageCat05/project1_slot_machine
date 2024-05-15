@@ -12,7 +12,7 @@ Symbols = {
     "7" : 3,
     "\5" : 5
 }
-value_of_sumbols = {
+value_of_symbols = {
     "\1" : 3,
     "\3" : 1,
     "7" : 10,
@@ -20,7 +20,7 @@ value_of_sumbols = {
 }
 # jackpot for 7, if 3 in a row 
 
-def check_winnings(columns, lines, bet, values):
+def check_winnings(columns, lines, bet, values:dict)->int:
     winnings = 0
     winning_lines = []
     for line in range(lines):
@@ -30,8 +30,8 @@ def check_winnings(columns, lines, bet, values):
             if symbol != symbol_to_check:
                 break
         else:  
-            winnings = values[symbol] * bet
             winning_lines.append(line+1)
+            winnings = values.get(symbol) * bet * len(winning_lines)
 
     return winnings,winning_lines
 
@@ -45,7 +45,9 @@ def get_slot_machine_spin(rows,cols,symbols:dict):
     columns = []
     for _ in range(cols): #basically we are creating a [[], [], []] so 3 colums , jisme har ek column ek reel ko represent kr rha hai jo ghume gi 
         column = [] # every single mini column is represented by this column
-        current_symbols = list(Symbols) #this creates a copy of my list, other method to do this was to Symbols[:]
+        #very less chance to win this way, lets create some more possibilities
+        #changed Symbols in line below to sym_list
+        current_symbols = list(sym_list) #this creates a copy of my list, other method to do this was to Symbols[:]
         for _ in range(rows):
             value = random.choice(current_symbols)
             current_symbols.remove(value) #removes first instace of value present in our list
@@ -130,7 +132,8 @@ def spin(balance):
     slots = get_slot_machine_spin(Rows,Cols,Symbols)
     print_slot_machine(slots)
 
-    winnings,winning_lines = check_winnings(slots, lines, bet, value_of_sumbols)
+    #changing "bet" to "total_bet"
+    winnings,winning_lines = check_winnings(slots, lines, total_bet, value_of_symbols)
     print(f"You Won: Rs.{winnings}")
     print(f"You won on lines:", *winning_lines )
     return winnings - total_bet
@@ -145,5 +148,5 @@ def main():
             break
         balance += spin(balance)
     
-    print(f"You are left with{balance}")
+    print(f"You are left with: {balance}")
 main()
